@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tiny Explorers</title>
+
+<!-- PWA setup -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#FF6B6B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Tiny Explorers">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF9F0;
+    --ink:#3A3153;
+    --coral:#FF6B6B;
+    --coral-dark:#E14E4E;
+    --teal:#3EC1C4;
+    --teal-dark:#2AA3A6;
+    --gold:#FFC93C;
+    --gold-dark:#E8AC12;
+    --violet:#A78BFA;
+    --violet-dark:#8A66F0;
+    --white:#FFFFFF;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent; user-select:none;}
+  html,body{
+    margin:0; height:100%; overflow:hidden;
+    font-family:'Fredoka', sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+  }
+  #app{position:relative; width:100%; height:100vh; overflow:hidden;}
+
+  /* ---------- HOME SCREEN ---------- */
+  .screen{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:flex-start;
+    padding: 28px 20px 20px;
+    transition: transform .45s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+  }
+  .screen.hidden-left{ transform: translateX(-110%); opacity:0; pointer-events:none; }
+  .screen.hidden-right{ transform: translateX(110%); opacity:0; pointer-events:none; }
+
+  .title-wrap{ text-align:center; margin-bottom: 22px; }
+  .title-wrap .mascot{ font-size: 52px; display:block; margin-bottom:2px; animation: bob 2.4s ease-in-out infinite; }
+  @keyframes bob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  h1{ font-size: 30px; font-weight:700; margin: 0; color:var(--ink); }
+  .subtitle{ font-size:15px; font-weight:500; color:#7A7191; margin-top:4px;}
+
+  .grid{
+    display:grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; width:100%; max-width: 420px; flex:1;
+  }
+  .cat-card{
+    border:none; border-radius: 26px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:8px; padding: 18px 10px;
+    font-family:inherit; font-size:19px; font-weight:600; color:var(--white);
+    cursor:pointer; position:relative;
+    box-shadow: 0 6px 0 rgba(0,0,0,0.15);
+    transform: translateY(0);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .cat-card:active{ transform: translateY(5px); box-shadow: 0 1px 0 rgba(0,0,0,0.15); }
+  .cat-card .emoji{ font-size:46px; }
+  .cat-card.animals{ background: var(--coral); }
+  .cat-card.colors{ background: var(--teal); }
+  .cat-card.numbers{ background: var(--gold); color:#4A3600; }
+  .cat-card.shapes{ background: var(--violet); }
+
+  /* ---------- DETAIL SCREEN ---------- */
+  .detail-screen{ justify-content:center; }
+  .top-bar{
+    position:absolute; top:18px; left:18px; right:18px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .home-btn{
+    width:52px; height:52px; border-radius:50%; border:none;
+    background: var(--white); font-size:24px; cursor:pointer;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.12);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .home-btn:active{ transform:translateY(3px); box-shadow:none; }
+  .progress-label{
+    font-size:15px; font-weight:600; background:rgba(255,255,255,0.7);
+    padding:8px 16px; border-radius:20px;
+  }
+
+  .item-stage{
+    display:flex; align-items:center; justify-content:center; gap: 14px;
+    width:100%; max-width: 460px;
+  }
+  .nav-arrow{
+    width:56px; height:56px; min-width:56px; border-radius:50%; border:none;
+    background: var(--white); font-size:26px; cursor:pointer; color:var(--ink);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.12); display:flex; align-items:center; justify-content:center;
+  }
+  .nav-arrow:active{ transform:translateY(3px); box-shadow:none; }
+
+  .item-card{
+    flex:1; aspect-ratio: 1/1; max-width: 300px;
+    border-radius: 40px; border: 6px solid var(--white);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    cursor:pointer; position:relative; overflow:hidden;
+    box-shadow: 0 8px 0 rgba(0,0,0,0.15);
+  }
+  .item-card:active{ transform: scale(0.97); }
+  .item-card .big-emoji{ font-size: 130px; line-height:1; animation: pulse 2.6s ease-in-out infinite; filter: drop-shadow(0 6px 8px rgba(0,0,0,0.15)); }
+  @keyframes pulse{ 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+  .item-card.shape-swatch .big-emoji{ animation:none; }
+
+  .word-label{
+    margin-top: 26px; font-size: 40px; font-weight:700; color: var(--ink);
+    letter-spacing: 0.5px;
+  }
+  .tap-hint{ margin-top: 6px; font-size:14px; color:#8A8199; font-weight:500;}
+
+  .dots-row{ display:flex; gap:8px; margin-top:16px; flex-wrap:wrap; justify-content:center; max-width:220px;}
+  .dot{ width:20px; height:20px; border-radius:50%; background: var(--gold-dark); }
+
+  /* star burst */
+  .burst{ position:absolute; inset:0; pointer-events:none; }
+  .star-particle{
+    position:absolute; font-size:22px; opacity:1;
+    animation: fly 0.75s ease-out forwards;
+  }
+  @keyframes fly{
+    to{ transform: translate(var(--dx), var(--dy)) scale(0.4) rotate(180deg); opacity:0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .mascot, .big-emoji{ animation:none !important; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- HOME -->
+  <div class="screen" id="home-screen">
+    <div class="title-wrap">
+      <span class="mascot">🦊</span>
+      <h1>Tiny Explorers</h1>
+      <div class="subtitle">Tap a box to start learning!</div>
+    </div>
+    <div class="grid">
+      <button class="cat-card animals" data-cat="animals"><span class="emoji">🐶</span>Animals</button>
+      <button class="cat-card colors" data-cat="colors"><span class="emoji">🎨</span>Colors</button>
+      <button class="cat-card numbers" data-cat="numbers"><span class="emoji">🔢</span>Numbers</button>
+      <button class="cat-card shapes" data-cat="shapes"><span class="emoji">⭐</span>Shapes</button>
+    </div>
+  </div>
+
+  <!-- DETAIL -->
+  <div class="screen detail-screen hidden-right" id="detail-screen">
+    <div class="top-bar">
+      <button class="home-btn" id="home-btn">🏠</button>
+      <div class="progress-label" id="progress-label">1 / 6</div>
+    </div>
+    <div class="item-stage">
+      <button class="nav-arrow" id="prev-btn">◀</button>
+      <div class="item-card" id="item-card">
+        <div class="big-emoji" id="big-emoji">🐶</div>
+        <div class="dots-row" id="dots-row"></div>
+      </div>
+      <button class="nav-arrow" id="next-btn">▶</button>
+    </div>
+    <div class="word-label" id="word-label">Dog</div>
+    <div class="tap-hint">Tap the picture to hear it!</div>
+  </div>
+
+</div>
+
+<script>
+const data = {
+  animals: [
+    {emoji:'🐶', word:'Dog', say:'Dog. Woof woof!'},
+    {emoji:'🐱', word:'Cat', say:'Cat. Meow!'},
+    {emoji:'🐮', word:'Cow', say:'Cow. Moo!'},
+    {emoji:'🦆', word:'Duck', say:'Duck. Quack quack!'},
+    {emoji:'🦁', word:'Lion', say:'Lion. Roar!'},
+    {emoji:'🐘', word:'Elephant', say:'Elephant.'}
+  ],
+  colors: [
+    {emoji:'🔴', word:'Red', say:'Red', bg:'#FF6B6B'},
+    {emoji:'🔵', word:'Blue', say:'Blue', bg:'#4A90E2'},
+    {emoji:'🟡', word:'Yellow', say:'Yellow', bg:'#FFC93C'},
+    {emoji:'🟢', word:'Green', say:'Green', bg:'#6BCB77'},
+    {emoji:'🟣', word:'Purple', say:'Purple', bg:'#A78BFA'},
+    {emoji:'🟠', word:'Orange', say:'Orange', bg:'#FF9F45'}
+  ],
+  numbers: [
+    {emoji:'1️⃣', word:'One', say:'One', dots:1},
+    {emoji:'2️⃣', word:'Two', say:'Two', dots:2},
+    {emoji:'3️⃣', word:'Three', say:'Three', dots:3},
+    {emoji:'4️⃣', word:'Four', say:'Four', dots:4},
+    {emoji:'5️⃣', word:'Five', say:'Five', dots:5}
+  ],
+  shapes: [
+    {emoji:'⚪', word:'Circle', say:'Circle'},
+    {emoji:'🟥', word:'Square', say:'Square'},
+    {emoji:'🔺', word:'Triangle', say:'Triangle'},
+    {emoji:'⭐', word:'Star', say:'Star'},
+    {emoji:'❤️', word:'Heart', say:'Heart'}
+  ]
+};
+
+const catColors = {
+  animals: {light:'#FFE3E3', dark:'#FF6B6B'},
+  colors:  {light:'#DFF7F7', dark:'#3EC1C4'},
+  numbers: {light:'#FFF3D0', dark:'#FFC93C'},
+  shapes:  {light:'#EDE4FF', dark:'#A78BFA'}
+};
+
+const homeScreen = document.getElementById('home-screen');
+const detailScreen = document.getElementById('detail-screen');
+const bigEmoji = document.getElementById('big-emoji');
+const wordLabel = document.getElementById('word-label');
+const dotsRow = document.getElementById('dots-row');
+const progressLabel = document.getElementById('progress-label');
+const itemCard = document.getElementById('item-card');
+
+let currentCat = 'animals';
+let currentIndex = 0;
+
+function speak(text){
+  try{
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 0.85;
+    utter.pitch = 1.15;
+    window.speechSynthesis.speak(utter);
+  }catch(e){}
+}
+
+function chime(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523.25, 659.25, 783.99];
+    notes.forEach((freq, i)=>{
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.001, ctx.currentTime + i*0.09);
+      gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + i*0.09 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i*0.09 + 0.3);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(ctx.currentTime + i*0.09);
+      osc.stop(ctx.currentTime + i*0.09 + 0.3);
+    });
+  }catch(e){}
+}
+
+function burst(container){
+  const stars = ['⭐','✨','🌟'];
+  for(let i=0;i<8;i++){
+    const s = document.createElement('div');
+    s.className = 'star-particle';
+    s.textContent = stars[Math.floor(Math.random()*stars.length)];
+    const angle = (Math.PI*2*i)/8;
+    const dist = 70 + Math.random()*30;
+    s.style.setProperty('--dx', Math.cos(angle)*dist + 'px');
+    s.style.setProperty('--dy', Math.sin(angle)*dist + 'px');
+    s.style.left = '50%'; s.style.top='50%';
+    container.appendChild(s);
+    setTimeout(()=> s.remove(), 800);
+  }
+}
+
+function renderItem(){
+  const list = data[currentCat];
+  const item = list[currentIndex];
+  const colors = catColors[currentCat];
+
+  bigEmoji.textContent = item.emoji;
+  wordLabel.textContent = item.word;
+  progressLabel.textContent = `${currentIndex+1} / ${list.length}`;
+
+  itemCard.style.background = item.bg ? '#FFFFFF' : colors.light;
+  itemCard.classList.toggle('shape-swatch', currentCat === 'colors');
+
+  dotsRow.innerHTML = '';
+  if(item.dots){
+    for(let i=0;i<item.dots;i++){
+      const d = document.createElement('div');
+      d.className = 'dot';
+      d.style.background = colors.dark;
+      dotsRow.appendChild(d);
+    }
+  }
+}
+
+function openCategory(cat){
+  currentCat = cat;
+  currentIndex = 0;
+  renderItem();
+  homeScreen.classList.add('hidden-left');
+  detailScreen.classList.remove('hidden-right');
+  detailScreen.classList.remove('hidden-left');
+}
+
+function goHome(){
+  homeScreen.classList.remove('hidden-left');
+  detailScreen.classList.add('hidden-right');
+}
+
+document.querySelectorAll('.cat-card').forEach(btn=>{
+  btn.addEventListener('click', ()=> openCategory(btn.dataset.cat));
+});
+
+document.getElementById('home-btn').addEventListener('click', goHome);
+
+document.getElementById('prev-btn').addEventListener('click', ()=>{
+  const list = data[currentCat];
+  currentIndex = (currentIndex - 1 + list.length) % list.length;
+  renderItem();
+});
+document.getElementById('next-btn').addEventListener('click', ()=>{
+  const list = data[currentCat];
+  currentIndex = (currentIndex + 1) % list.length;
+  renderItem();
+});
+
+itemCard.addEventListener('click', ()=>{
+  const item = data[currentCat][currentIndex];
+  speak(item.say);
+  chime();
+  burst(itemCard);
+  itemCard.style.transform = 'scale(1.04)';
+  setTimeout(()=> itemCard.style.transform = '', 180);
+});
+
+renderItem();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>

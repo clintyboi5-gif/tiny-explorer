@@ -1,0 +1,32 @@
+{
+  "name": "Tiny Explorers",
+  "short_name": "Tiny Explorers",
+  "description": "A kid-friendly learning app for toddlers - animals, colors, numbers, and shapes.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFF9F0",
+  "theme_color": "#FF6B6B",
+  "categories": ["education", "kids"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
