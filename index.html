@@ -138,8 +138,103 @@
     to{ transform: translate(var(--dx), var(--dy)) scale(0.4) rotate(180deg); opacity:0; }
   }
 
+  /* ---------- EXPLORE OUTSIDE ---------- */
+  .cat-card.explore{ grid-column: span 2; flex-direction:row; gap:14px; background:#6BCB77; }
+  .cat-card.explore .emoji{ font-size:40px; }
+  .cat-card.explore small{ display:block; font-size:13px; font-weight:500; opacity:.9; }
+  .explore-text{ text-align:left; line-height:1.15; }
+
+  .explore-screen{ padding: 18px 16px 0; }
+  .ex-top{ width:100%; max-width:460px; display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
+  .ex-title{ flex:1; margin:0; font-size:22px; font-weight:700; text-align:center; }
+  .ex-scroll{ flex:1; width:100%; max-width:460px; overflow-y:auto; -webkit-overflow-scrolling:touch; padding-bottom:24px; }
+
+  .hunt-list{ display:flex; flex-direction:column; gap:14px; }
+  .hunt-card{
+    display:flex; align-items:center; gap:14px; width:100%; padding:16px 18px;
+    border:none; border-radius:24px; color:#fff; font-family:inherit; text-align:left; cursor:pointer;
+    box-shadow:0 6px 0 rgba(0,0,0,.15);
+  }
+  .hunt-card:active{ transform:translateY(5px); box-shadow:0 1px 0 rgba(0,0,0,.15); }
+  .hunt-emoji{ font-size:46px; }
+  .hunt-info{ flex:1; display:flex; flex-direction:column; gap:6px; }
+  .hunt-name{ font-size:20px; font-weight:600; }
+  .hunt-bar{ height:10px; border-radius:6px; background:rgba(255,255,255,.35); overflow:hidden; }
+  .hunt-fill{ display:block; height:100%; background:#fff; border-radius:6px; transition:width .4s ease; }
+  .hunt-count{ font-size:14px; font-weight:500; }
+
+  .sticker-book-btn{
+    width:100%; margin-top:18px; padding:16px; border:none; border-radius:24px;
+    background:var(--gold); color:#4A3600; font-family:inherit; font-size:20px; font-weight:600; cursor:pointer;
+    box-shadow:0 6px 0 var(--gold-dark);
+  }
+  .sticker-book-btn:active{ transform:translateY(5px); box-shadow:0 1px 0 var(--gold-dark); }
+  .privacy-note{ text-align:center; font-size:13px; color:#7A7191; margin:16px 0 0; }
+
+  .find-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .find-tile{
+    position:relative; aspect-ratio:1/1; border:5px solid #fff; border-radius:28px; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    font-family:inherit; color:var(--ink); background-size:cover; background-position:center;
+    box-shadow:0 6px 0 rgba(0,0,0,.12); overflow:hidden;
+  }
+  .find-tile:active{ transform:scale(.96); }
+  .tile-emoji{ font-size:64px; line-height:1; }
+  .tile-word{ font-size:18px; font-weight:600; }
+  .find-tile.found{ justify-content:flex-end; padding-bottom:8px; }
+  .find-tile.found .tile-word{ background:rgba(255,255,255,.92); padding:2px 12px; border-radius:14px; }
+  .tile-badge{ position:absolute; top:6px; left:6px; font-size:28px; background:#fff; border-radius:50%; width:44px; height:44px; display:flex; align-items:center; justify-content:center; }
+  .tile-star{ position:absolute; top:6px; right:8px; font-size:30px; filter:drop-shadow(0 2px 2px rgba(0,0,0,.25)); }
+
+  .sticker-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .sticker{
+    position:relative; aspect-ratio:1/1; padding:0; border:4px solid; border-radius:22px; overflow:hidden;
+    background:#fff; cursor:pointer; font-family:inherit; transform:rotate(-2deg);
+    box-shadow:0 4px 0 rgba(0,0,0,.12);
+  }
+  .sticker:nth-child(even){ transform:rotate(2deg); }
+  .sticker img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .sticker-badge{ position:absolute; top:4px; left:4px; font-size:20px; }
+  .sticker-word{ position:absolute; left:0; right:0; bottom:0; background:rgba(255,255,255,.9); font-size:13px; font-weight:600; color:var(--ink); padding:2px 0; }
+  .empty{ grid-column:1/-1; text-align:center; color:#7A7191; font-size:18px; padding-top:40px; }
+  .empty p{ margin:4px 0; }
+  .empty-emoji{ font-size:64px; }
+
+  /* overlays */
+  .overlay{ position:fixed; inset:0; z-index:10; background:rgba(58,49,83,.55); display:flex; align-items:center; justify-content:center; padding:16px; }
+  .overlay[hidden]{ display:none; }
+  .sheet{
+    position:relative; width:100%; max-width:380px; max-height:100%; overflow-y:auto;
+    background:var(--cream); border-radius:32px; padding:26px 20px 20px; text-align:center;
+    animation: popin .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes popin{ from{ transform:scale(.8); opacity:0; } to{ transform:scale(1); opacity:1; } }
+  .sheet-close{ position:absolute; top:12px; right:12px; width:40px; height:40px; border-radius:50%; border:none; background:#fff; font-size:18px; cursor:pointer; color:var(--ink); box-shadow:0 3px 0 rgba(0,0,0,.1); }
+  .sheet-emoji{ width:170px; height:170px; margin:6px auto 0; border-radius:36px; display:flex; align-items:center; justify-content:center; font-size:100px; border:5px solid #fff; }
+  .sheet-photo{ display:block; width:100%; max-width:280px; aspect-ratio:1/1; object-fit:cover; margin:6px auto 0; border-radius:28px; border:5px solid #fff; box-shadow:0 6px 0 rgba(0,0,0,.12); }
+  .sheet-word{ font-size:32px; font-weight:700; margin-top:14px; }
+  .sheet-text{ font-size:19px; font-weight:500; margin:6px 0 16px; }
+  .grownup-label{ display:inline-block; margin-top:14px; padding:4px 14px; border-radius:14px; background:var(--violet); color:#fff; font-size:14px; font-weight:600; }
+  .big-btn{ width:100%; padding:16px; border:none; border-radius:22px; font-family:inherit; font-size:20px; font-weight:600; cursor:pointer; }
+  .big-btn:active{ transform:translateY(4px); box-shadow:none !important; }
+  .big-btn.primary{ background:var(--coral); color:#fff; box-shadow:0 5px 0 var(--coral-dark); }
+  .big-btn.secondary{ background:#fff; color:var(--ink); box-shadow:0 5px 0 rgba(0,0,0,.12); }
+  .big-btn.danger{ background:#fff; color:var(--coral-dark); border:2px solid var(--coral); box-shadow:none; font-size:17px; }
+  .btn-row{ display:flex; gap:10px; }
+  .link-btn{ margin-top:12px; border:none; background:none; font-family:inherit; font-size:16px; color:#7A7191; cursor:pointer; }
+  .sticker-pop{ font-size:120px; margin-top:8px; animation: stickerpop .6s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes stickerpop{ from{ transform:scale(0) rotate(-30deg);} to{ transform:scale(1) rotate(0);} }
+  .trophy{ font-size:100px; animation: stickerpop .6s cubic-bezier(.34,1.56,.64,1); }
+  .gate-row{ display:flex; gap:10px; margin-top:6px; }
+  .gate-choice{ font-size:26px; }
+  .settings-text{ font-size:15px; color:#5E5576; text-align:left; line-height:1.45; }
+  .settings-text p{ margin:0 0 10px; }
+  .shake{ animation: shake .4s; }
+  @keyframes shake{ 0%,100%{transform:translateX(0)} 25%{transform:translateX(-10px)} 75%{transform:translateX(10px)} }
+
   @media (prefers-reduced-motion: reduce){
     .mascot, .big-emoji{ animation:none !important; }
+    .sheet, .sticker-pop, .trophy, .shake{ animation:none !important; }
   }
 </style>
 </head>
@@ -158,6 +253,7 @@
       <button class="cat-card colors" data-cat="colors"><span class="emoji">🎨</span>Colors</button>
       <button class="cat-card numbers" data-cat="numbers"><span class="emoji">🔢</span>Numbers</button>
       <button class="cat-card shapes" data-cat="shapes"><span class="emoji">⭐</span>Shapes</button>
+      <button class="cat-card explore" id="explore-card"><span class="emoji">🔍</span><span class="explore-text">Explore Outside<small>Scavenger hunts!</small></span></button>
     </div>
   </div>
 
@@ -179,7 +275,80 @@
     <div class="tap-hint">Tap the picture to hear it!</div>
   </div>
 
+  <!-- EXPLORE: HUNT LIST -->
+  <div class="screen explore-screen hidden-right" id="hunts-screen">
+    <div class="ex-top">
+      <button class="home-btn" id="hunts-back" aria-label="Back home">🏠</button>
+      <h2 class="ex-title">Explore Outside</h2>
+      <button class="home-btn" id="parent-btn" aria-label="Grown-up settings">⚙️</button>
+    </div>
+    <div class="ex-scroll">
+      <div class="hunt-list" id="hunt-list"></div>
+      <button class="sticker-book-btn" id="stickers-btn">📒 My Stickers <span id="sticker-count"></span></button>
+      <p class="privacy-note">🔒 Photos stay on this device. No accounts, no ads.</p>
+    </div>
+  </div>
+
+  <!-- EXPLORE: ONE HUNT -->
+  <div class="screen explore-screen hidden-right" id="hunt-screen">
+    <div class="ex-top">
+      <button class="home-btn" id="hunt-back" aria-label="Back to hunts">◀</button>
+      <h2 class="ex-title" id="hunt-title"></h2>
+      <div class="progress-label" id="hunt-progress"></div>
+    </div>
+    <div class="ex-scroll"><div class="find-grid" id="find-grid"></div></div>
+  </div>
+
+  <!-- EXPLORE: STICKER BOOK -->
+  <div class="screen explore-screen hidden-right" id="stickers-screen">
+    <div class="ex-top">
+      <button class="home-btn" id="stickers-back" aria-label="Back to hunts">◀</button>
+      <h2 class="ex-title">My Stickers</h2>
+      <div class="progress-label" id="stickers-total"></div>
+    </div>
+    <div class="ex-scroll"><div class="sticker-grid" id="sticker-grid"></div></div>
+  </div>
+
 </div>
+
+<!-- EXPLORE OVERLAYS -->
+<div class="overlay" id="item-overlay" hidden><div class="sheet" id="item-sheet"></div></div>
+
+<div class="overlay" id="gate-overlay" hidden>
+  <div class="sheet">
+    <button class="sheet-close" id="gate-close" aria-label="Close">✕</button>
+    <div class="grownup-label">👋 Grown-ups only</div>
+    <p class="sheet-text" id="gate-question"></p>
+    <div class="gate-row" id="gate-choices"></div>
+  </div>
+</div>
+
+<div class="overlay" id="settings-overlay" hidden>
+  <div class="sheet">
+    <button class="sheet-close" id="settings-close" aria-label="Close">✕</button>
+    <div class="sheet-word" style="margin:22px 0 10px;font-size:26px">Grown-up Settings</div>
+    <div class="settings-text">
+      <p>🔒 <b>Private by design.</b> Photos your child takes are saved only on this device. Nothing is uploaded, and there are no accounts, ads or tracking.</p>
+      <p>👋 After each photo, a grown-up taps <b>Yes!</b> to confirm the find and award the sticker.</p>
+      <p id="photo-count"></p>
+    </div>
+    <button class="big-btn danger" id="delete-all">🗑️ Delete all photos</button>
+  </div>
+</div>
+
+<div class="overlay" id="done-overlay" hidden>
+  <div class="sheet">
+    <div class="trophy">🏆</div>
+    <div class="sheet-word">Hooray!</div>
+    <p class="sheet-text" id="done-text"></p>
+    <div class="btn-row">
+      <button class="big-btn secondary" id="done-stickers">📒 Stickers</button>
+      <button class="big-btn primary" id="done-ok">Yay!</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="camera-input" accept="image/*" capture="environment" hidden>
 
 <script>
 const data = {
@@ -315,7 +484,7 @@ function goHome(){
   detailScreen.classList.add('hidden-right');
 }
 
-document.querySelectorAll('.cat-card').forEach(btn=>{
+document.querySelectorAll('.cat-card[data-cat]').forEach(btn=>{
   btn.addEventListener('click', ()=> openCategory(btn.dataset.cat));
 });
 
@@ -349,5 +518,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+<script src="explore.js"></script>
 </body>
 </html>
