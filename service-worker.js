@@ -1,7 +1,8 @@
-const CACHE_NAME = "tiny-explorers-v1";
+const CACHE_NAME = "tiny-explorers-v2";
 const ASSETS = [
   "./",
   "./index.html",
+  "./explore.js",
   "./manifest.json",
   "./icon-192.png",
   "./icon-512.png",
